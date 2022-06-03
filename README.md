@@ -1,0 +1,1 @@
+Potrzebne jes zainstalowanie pygame na komputerze
