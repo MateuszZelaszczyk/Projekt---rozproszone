@@ -1,0 +1,2 @@
+Na chwilę obecną po zdebugowaniu server.py i dwukrotnym zdebugowaniu client.py 
+mamy 2 okna dla graczy, gdzie kązdy ma swoją ćme na tle zielony, a przeciwnika na czerownym
