@@ -1,1 +1,1 @@
-Potrzebne jes zainstalowanie pygame na komputerze
+Potrzebne jest zainstalowanie pygame na komputerze
