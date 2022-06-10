@@ -7,6 +7,7 @@ class Server:
     def __init__(self):
         self.ip = socket.gethostbyname(socket.gethostname())
         self.port = 5555
+        self.player_positions = [(0, 0), (200, 200)]
         self.map = Map(600, 700)
         self.player1_eaten_plants = []
         self.player2_eaten_plants = []
@@ -46,8 +47,7 @@ class Server:
         return str(tup[0]) + "," + str(tup[1])
 
     def threaded_client(self, connect, player):
-        pos = [(0, 0), (100, 100)]
-        messgage = self.make_pos(pos[player]) + ";" + self.map.get_objects_coordinates_as_str()
+        messgage = self.make_pos(self.player_positions[player]) + ";" + self.map.get_objects_coordinates_as_str()
         connect.send(str.encode(messgage))
         print("Sending: ", messgage)
         reply = ""
@@ -59,17 +59,17 @@ class Server:
                     break
                 else:
                     print("Recieved:", data)
-                    pos[player], eaten_plants = self.read_positions(data)
-                    print('internal data')
-                    print(eaten_plants)
+                    self.player_positions[player], eaten_plants = self.read_positions(data)
+                    print('pos[player]')
+                    print(self.player_positions[player])
                     self.map.delete_objects(eaten_plants)
                     if player == 1:
                         self.player1_eaten_plants = eaten_plants
-                        reply = self.make_pos(pos[0]) + ";" + self.make_player2_plants()
+                        reply = self.make_pos(self.player_positions[0]) + ";" + self.make_player2_plants()
                         self.player2_eaten_plants.clear()
                     else:
                         self.player2_eaten_plants = eaten_plants
-                        reply = self.make_pos(pos[1]) + ";" + self.make_player1_plants()
+                        reply = self.make_pos(self.player_positions[1]) + ";" + self.make_player1_plants()
                         self.player1_eaten_plants.clear()
 
                     print("Sending: ", reply)
