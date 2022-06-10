@@ -1,8 +1,9 @@
 from _thread import *
 import  socket
 import sys
- 
-server = "192.168.1.198"
+print("Podaj adres ip:")
+ip = input()
+server = ip
 port = 5555
 
 s= socket.socket(socket.AF_INET, socket.SOCK_STREAM)
