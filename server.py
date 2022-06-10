@@ -1,8 +1,8 @@
 from _thread import *
 import  socket
 import sys
-print("Podaj adres ip:")
-ip = input()
+hostname = socket.gethostname()
+ip = socket.gethostbyname(hostname)
 server = ip
 port = 5555
 
