@@ -3,9 +3,46 @@ import pygame
 from network import Network
 from player import Player
 from game import Game
+from button import Button
+
+back_photo = pygame.image.load("menu_background.jpg")
+
+button_img = pygame.image.load("back_bt.jpg")
+button_img = pygame.transform.scale(button_img,(160,60))
+font = pygame.font.SysFont("cambria",40)
 
 
-def main():
+def menu():
+    menu_text = font.render("Wyścig ciem bukszpanowych", True, "white", "black")
+    textRect = menu_text.get_rect()
+    textRect.center = (300, 200)
+    menu_text.set_alpha(190)
+    while True:
+        win.blit(back_photo, (0, 0))
+        win.blit(menu_text, textRect)
+        mouse_pos = pygame.mouse.get_pos()
+
+        play_bt = Button(button_img, (300, 350), "PLAY", font, "white", "White")
+        quit_bt = Button(button_img, (300, 440), "QUIT", font, "white", "White")
+
+        for button in [play_bt, quit_bt]:
+            button.update(win)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if play_bt.checkForInput(mouse_pos):
+                    play()
+                if quit_bt.checkForInput(mouse_pos):
+                    pygame.quit()
+                    sys.exit()
+
+        pygame.display.update()
+
+
+def play():
     game = Game()
     pygame.init()
     run = True
@@ -46,4 +83,4 @@ def main():
     pygame.quit()
     sys.exit()
 
-main()
+menu()
