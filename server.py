@@ -14,27 +14,22 @@ ip = socket.gethostbyname(hostname)
 server = ip
 port = 5555
 
-scom_port = None
-for p in SERVER_PORTS:
-    print("Now checking port ", p)
-    if not is_port_in_use(p):
-        scom_port = p
-        break
-    else:
-        print (f"port {p} is in use on this server")
-
-if(scom_port == None):
-    print("All server ports are occupied. Cannot start server.")
-    exit(1)
-else:
-    print(f"SCOM port for this server is {scom_port}")
-
 s= socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print("sth else")
 try:
     s.bind((server, port))
 except socket.error as e:
     str(e)
+
+s_serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+for p in SERVER_PORTS:
+    try:
+        s_serv.bind((server, p))
+        print(f"Successfully connected to SCOM port {p}")
+        break
+    except socket.error as e:
+        pass
+s_serv.listen(1)
 
 s.listen(2)
 print("Waiting for a connection, Server Started")
