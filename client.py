@@ -1,12 +1,22 @@
 import sys
 import pygame
 from network import Network
-width = 600
+from button import Button
+
+
+pygame.init()
+width = 1200
 height = 700
 
 win = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Client")
+pygame.display.set_caption("Fly_attack")
+back_photo = pygame.image.load("menu_background.jpg")
 
+button_img = pygame.image.load("back_bt.jpg")
+button_img = pygame.transform.scale(button_img,(160,60))
+
+
+font = pygame.font.SysFont("cambria",40)
 clientNumber = 0;
 
 class  Player():
@@ -56,8 +66,8 @@ def window(win,player, player2):
     player2.draw(win,"2")
     pygame.display.update()
 
-def main():
-    pygame.init()
+def play():
+
     run = True
     n=Network()
     startPos = read_pos(n.getPos())
@@ -79,4 +89,29 @@ def main():
                 sys.exit()
         p.move()
         window(win,p,p2)
-main()
+def menu():
+    while True:
+        win.blit(back_photo, (0, 0))
+
+        mouse_pos = pygame.mouse.get_pos()
+
+        play_bt = Button(button_img, (600, 350), "PLAY",font, "white", "White")
+        quit_bt = Button(button_img, (600, 440), "QUIT",font,  "white", "White")
+
+        for button in [play_bt, quit_bt]:
+            button.update(win)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if play_bt.checkForInput(mouse_pos):
+                    play()
+                if quit_bt.checkForInput(mouse_pos):
+                    pygame.quit()
+                    sys.exit()
+
+        pygame.display.update()
+
+menu()
