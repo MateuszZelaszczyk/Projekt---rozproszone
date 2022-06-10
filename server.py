@@ -1,10 +1,12 @@
 from _thread import *
 import  socket
+from map import Map
 import sys
 hostname = socket.gethostname()
 ip = socket.gethostbyname(hostname)
 server = ip
 port = 5555
+map = Map(700, 600)
 
 s= socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -12,7 +14,6 @@ try:
     s.bind((server, port))
 except socket.error as e:
     str(e)
-
 s.listen(2)
 print("Waiting for a connection, Server Started")
 
@@ -37,14 +38,17 @@ def threaded_client(connect, player):
                 print("Disconnected")
                 break
             else:
+                map_objects_str = map.get_objects_coordinates_as_str()
+                print(map_objects_str)
                 if player == 1:
-                    reply = pos[0]
+                    reply = make_pos(pos[0]) + ";" + map_objects_str
+
                 else:
-                    reply = pos[1]
+                    reply = make_pos(pos[1]) + ";" + map_objects_str
 
                 print("Recieved:", data)
                 print("Sending: ", reply)
-            connect.sendall(str.encode(make_pos(reply)))
+            connect.sendall(str.encode(reply))
         except:
             break
 
