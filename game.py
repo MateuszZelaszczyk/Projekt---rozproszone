@@ -9,6 +9,8 @@ class Game():
         self.win = pygame.display.set_mode((self.width, self.height))
         self.plant_image = pygame.transform.scale(pygame.image.load("plant.png"), (40, 40))
         self.plant_image2 = pygame.transform.scale(pygame.image.load("plant2.png"), (40, 40))
+        self.map1_image = pygame.transform.scale(pygame.image.load("map1.png"), (self.width, self.height))
+        self.map2_image = pygame.transform.scale(pygame.image.load("map2.png"), (self.width, self.height))
         self.plants = dict()
         self.eaten_plants = []
         self.clientNumber = 0
@@ -34,6 +36,7 @@ class Game():
     def read_positions(self, strs):
         strs = strs.split(";")
         player2_pos = self.read_pos(strs[0])
+
         strs.pop(0)
         data = strs[0].split(",")
         if data[0] != '':
@@ -44,13 +47,17 @@ class Game():
 
     def read_pos(self, str):
         str = str.split(",")
-        return int(str[0]), int(str[1])
+        return str[0], int(str[1]), int(str[2])
 
     def make_pos(self, tup):
-        return str(tup[0]) + "," + str(tup[1])
+        return str(tup[0]) + "," + str(tup[1]) + "," + str(tup[1])
 
     def window(self, player, player2):
         self.win.fill((34, 139, 34))
+        if player.map == 'm1':
+            self.win.blit(self.map1_image, (0, 0))
+        else:
+            self.win.blit(self.map2_image, (0, 0))
         for i in self.plants:
             self.draw_plant(self.win, self.plants[i])
         player.draw(self.win, "1")

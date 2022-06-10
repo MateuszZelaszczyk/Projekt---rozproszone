@@ -14,8 +14,8 @@ def main():
     for pos in plants_pos:
         game.make_plant_pos(pos)
     pygame.display.set_caption("Wielki wyscig ciem")
-    p = Player(int(startPos[0]), int(startPos[1]), 60, 60, (255, 255, 255))
-    p2 = Player(0, 0, 60, 60, (255, 255, 255))
+    p = Player(str(startPos[0]), int(startPos[1]), int(startPos[2]), 60, 60, (255, 255, 255))
+    p2 = Player(str(startPos[0]), 0, 0, 60, 60, (255, 255, 255))
     clock = pygame.time.Clock()
     while run:
         #clock.tick(1)
@@ -30,15 +30,16 @@ def main():
                 game.eaten_plants.append(i)
         game.delete_objects(game.eaten_plants)
         p.points += len(game.eaten_plants)
-        player_position = game.make_pos((p.x, p.y))
+        player_position = game.make_pos((p.map, p.x, p.y))
         eaten_plants_str = ",".join([str(key) for key in game.eaten_plants])
         game.eaten_plants.clear()
         reply = n.send(player_position + ";" + eaten_plants_str)
         parsed_reply = game.read_positions(reply)
         removed_objects = parsed_reply[1]
         game.delete_objects(removed_objects)
-        p2.x = parsed_reply[0][0]
-        p2.y = parsed_reply[0][1]
+        p2.map = parsed_reply[0][0]
+        p2.x = parsed_reply[0][1]
+        p2.y = parsed_reply[0][2]
         p2.update()
         p.move()
         game.window(p, p2)

@@ -2,7 +2,8 @@ import pygame
 
 
 class Player:
-    def __init__(self, x, y, width, height, color):
+    def __init__(self, map, x, y, width, height, color):
+        self.map = map
         self.x = x
         self.y = y
         self.height = height
@@ -35,4 +36,27 @@ class Player:
         self.update()
 
     def update(self):
+        map_height = 700
+        map_width = 600
         self.rect = (self.x, self.y, self.width, self.height)
+        other_map = 'm2' if self.map == 'm1' else 'm1'
+        if self.x < 0 and self.y > map_height:
+            self.map = other_map
+            self.x = map_width - self.width
+            self.y = self.height
+        elif self.x > map_width:
+            self.map = other_map
+            self.x = 0 + self.width
+            self.y = map_height - self.y
+        elif self.x + self.width < 0:
+            self.map = other_map
+            self.x = map_width - self.width
+            self.y = map_height - self.y
+        elif self.y < 0:
+            self.map = other_map
+            self.x = map_width - self.x
+            self.y = map_height
+        elif self.y > map_height:
+            self.map = other_map
+            self.x = map_width - self.x
+            self.y = 0 + self.height
