@@ -2,7 +2,7 @@ import pygame
 from random import randrange
 
 
-class Game():
+class Game:
     def __init__(self):
         self.width = 600
         self.height = 700
@@ -74,8 +74,6 @@ class Game():
         else:
             self.win.blit(self.map2_image, (0, 0))
             local_plant_keys = self.get_m2_plants()
-        print('local keys')
-        print(local_plant_keys)
         for key in local_plant_keys:
             self.draw_plant(self.win, self.plants[key])
         if player.map == player2.map:

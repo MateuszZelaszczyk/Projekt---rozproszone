@@ -46,18 +46,13 @@ class Server:
         pos_str = pos_str.split(",")
         return str(pos_str[0]), int(pos_str[1]), int(pos_str[2])
 
-    # def get_map_for_position(self, pos):
-    #     if pos[0] == 'm1':
-    #         return self.map1
-    #     return self.map2
-
     def make_pos(self, tup):
         return str(tup[0]) + "," + str(tup[1]) + "," + str(tup[2])
 
     def threaded_client(self, connect, player):
         messgage = self.make_pos(self.player_positions[player]) + ";" + self.map.get_objects_coordinates_as_str()
         connect.send(str.encode(messgage))
-        print("Sending: ", messgage)
+        #print("Sending: ", messgage)
         while True:
             try:
                 data = connect.recv(2048).decode()
@@ -78,8 +73,8 @@ class Server:
                         self.player2_eaten_plants = eaten_plants
                         reply = self.make_pos(self.player_positions[1]) + ";" + self.make_player1_plants()
                         self.player1_eaten_plants.clear()
-                    print("Recieved:", data)
-                    print("Sending: ", reply)
+                    #print("Recieved:", data)
+                    #print("Sending: ", reply)
                     connect.sendall(str.encode(reply))
             except:
                 break

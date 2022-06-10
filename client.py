@@ -50,7 +50,6 @@ def play(game):
     run = True
     n = Network()
     response = n.get_position()
-    #print(response)
     startPos, plants_pos = game.read_map_positions(response)
     for pos in plants_pos:
         game.make_plant_pos(pos)
@@ -79,8 +78,6 @@ def play(game):
         eaten_plants_str = ",".join([str(key) for key in game.eaten_plants])
         game.eaten_plants.clear()
         reply = n.send(player_position + ";" + eaten_plants_str)
-        #print('replay')
-        #print(reply)
         parsed_reply = game.read_positions(reply)
         removed_objects = parsed_reply[1]
         game.delete_objects(removed_objects)
