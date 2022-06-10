@@ -6,19 +6,24 @@ class Map:
     def __init__(self, width, height):
         self.height = height
         self.width = width
-        self.objects = []
+        self.objects = dict()
         self.create_map()
 
     def create_map(self):
-        objects_number = randrange(240, 270)
+        objects_number = randrange(270, 300)
         for i in range(objects_number):
-            self.objects.append([randrange(0, self.width, 25), randrange(0, self.height, 25)])
+            self.objects[i] = [randrange(0, self.width, 30), randrange(0, self.height, 30)]
 
-    def delete_object(self, x, y):
-        pass
-
-    def get_object_as_str(self, game_object):
-        return str(game_object[0]) + "," + str(game_object[1])
+    def get_object_as_str(self, key):
+        return str(key) + "," + str(self.objects[key][0]) + "," + str(self.objects[key][1])
 
     def get_objects_coordinates_as_str(self):
-        return ';'.join(map(lambda x: self.get_object_as_str(x), self.objects))
+        return ';'.join(map(lambda key: self.get_object_as_str(key), self.objects))
+
+    def delete_objects(self, objects_keys):
+        for key in objects_keys:
+            try:
+                self.objects.pop(key)
+            except KeyError as e:
+                pass
+
