@@ -1,0 +1,34 @@
+version: '1'
+services:
+  server1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mainmapserver
+    environment:
+      HOME: /home/mmaz/Projekt---rozproszone
+    command: python server.py
+    ports:
+      - 5555:5555
+  server2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: secondmapserver
+    environment:
+      HOME: /home/mmaz/Projekt---rozproszone
+    command: python server.py
+    ports:
+      - 5556:5555
+  mongo-express:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - db-volume:/data/db
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+volumes:
+  db-volume:
