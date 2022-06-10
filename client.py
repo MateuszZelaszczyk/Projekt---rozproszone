@@ -5,7 +5,7 @@ from button import Button
 
 
 pygame.init()
-width = 1200
+width = 600
 height = 700
 
 win = pygame.display.set_mode((width, height))
@@ -17,7 +17,7 @@ button_img = pygame.transform.scale(button_img,(160,60))
 
 
 font = pygame.font.SysFont("cambria",40)
-menu_font = pygame.font.SysFont("cambria",52)
+menu_font = pygame.font.SysFont("cambria",40)
 clientNumber = 0;
 
 class  Player():
@@ -93,7 +93,7 @@ def play():
 def menu():
     menu_text = menu_font.render("Wyścig ciem bukszpanowych", True, "white", "black")
     textRect = menu_text.get_rect()
-    textRect.center =(600,200)
+    textRect.center =(300,200)
     menu_text.set_alpha(190)
     while True:
         win.blit(back_photo, (0, 0))
