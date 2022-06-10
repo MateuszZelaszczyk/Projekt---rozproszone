@@ -17,6 +17,7 @@ button_img = pygame.transform.scale(button_img,(160,60))
 
 
 font = pygame.font.SysFont("cambria",40)
+menu_font = pygame.font.SysFont("cambria",52)
 clientNumber = 0;
 
 class  Player():
@@ -90,13 +91,17 @@ def play():
         p.move()
         window(win,p,p2)
 def menu():
+    menu_text = menu_font.render("Wyścig ciem bukszpanowych", True, "white", "black")
+    textRect = menu_text.get_rect()
+    textRect.center =(600,200)
+    menu_text.set_alpha(190)
     while True:
         win.blit(back_photo, (0, 0))
-
+        win.blit(menu_text, textRect)
         mouse_pos = pygame.mouse.get_pos()
 
-        play_bt = Button(button_img, (600, 350), "PLAY",font, "white", "White")
-        quit_bt = Button(button_img, (600, 440), "QUIT",font,  "white", "White")
+        play_bt = Button(button_img, (width*0.5, 350), "PLAY",font, "white", "White")
+        quit_bt = Button(button_img, (width*0.5, 440), "QUIT",font,  "white", "White")
 
         for button in [play_bt, quit_bt]:
             button.update(win)
