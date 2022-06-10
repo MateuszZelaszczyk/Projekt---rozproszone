@@ -4,8 +4,8 @@ from random import randrange
 
 class Map:
     def __init__(self, width, height):
-        self.height = height
-        self.width = width
+        self.height = height-30
+        self.width = width-30
         self.objects = dict()
         self.create_map()
 

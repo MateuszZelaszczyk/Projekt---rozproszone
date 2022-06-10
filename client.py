@@ -50,7 +50,7 @@ def play(game):
     run = True
     n = Network()
     response = n.get_position()
-    print(response)
+    #print(response)
     startPos, plants_pos = game.read_map_positions(response)
     for pos in plants_pos:
         game.make_plant_pos(pos)
@@ -64,7 +64,11 @@ def play(game):
             if event.type == pygame.QUIT:
                 run = False
         player_rect = pygame.Rect(p.x, p.y, 60, 60)
-        for i in game.plants:
+        if p.map == 'm1':
+            local_plant_keys = game.get_m1_plants()
+        else:
+            local_plant_keys = game.get_m2_plants()
+        for i in local_plant_keys:
             rect = pygame.Rect(game.plants[i][2], game.plants[i][3], 40, 40)
             collide = rect.colliderect(player_rect)
             if collide:
@@ -75,8 +79,8 @@ def play(game):
         eaten_plants_str = ",".join([str(key) for key in game.eaten_plants])
         game.eaten_plants.clear()
         reply = n.send(player_position + ";" + eaten_plants_str)
-        print('replay')
-        print(reply)
+        #print('replay')
+        #print(reply)
         parsed_reply = game.read_positions(reply)
         removed_objects = parsed_reply[1]
         game.delete_objects(removed_objects)
