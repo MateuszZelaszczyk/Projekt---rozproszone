@@ -10,9 +10,7 @@ def main():
     pygame.init()
     run = True
     n = Network()
-    var = n.get_position()
-    print(var)
-    startPos, plants_pos = game.read_map_positions(var)
+    startPos, plants_pos = game.read_map_positions(n.get_position())
     for pos in plants_pos:
         game.make_plant_pos(pos)
     pygame.display.set_caption("Wielki wyscig ciem")
@@ -34,16 +32,12 @@ def main():
         player_position = game.make_pos((p.x, p.y))
         eaten_plants_str = ",".join([str(key) for key in game.eaten_plants])
         game.eaten_plants.clear()
-        reply0 = n.send(player_position + ";" + eaten_plants_str)
-
-        print('reply0')
-        print(reply0)
-        reply = game.read_positions(reply0)
-
-        removed_objects = reply[1]
+        reply = n.send(player_position + ";" + eaten_plants_str)
+        parsed_reply = game.read_positions(reply)
+        removed_objects = parsed_reply[1]
         game.delete_objects(removed_objects)
-        p2.x = reply[0][0]
-        p2.y = reply[0][1]
+        p2.x = parsed_reply[0][0]
+        p2.y = parsed_reply[0][1]
         p2.update()
         p.move()
         game.window(p, p2)

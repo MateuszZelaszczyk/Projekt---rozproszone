@@ -58,10 +58,7 @@ class Server:
                     print("Disconnected")
                     break
                 else:
-                    print("Recieved:", data)
                     self.player_positions[player], eaten_plants = self.read_positions(data)
-                    print('pos[player]')
-                    print(self.player_positions[player])
                     self.map.delete_objects(eaten_plants)
                     if player == 1:
                         self.player1_eaten_plants = eaten_plants
@@ -71,7 +68,7 @@ class Server:
                         self.player2_eaten_plants = eaten_plants
                         reply = self.make_pos(self.player_positions[1]) + ";" + self.make_player1_plants()
                         self.player1_eaten_plants.clear()
-
+                    print("Recieved:", data)
                     print("Sending: ", reply)
                 connect.sendall(str.encode(reply))
             except:
