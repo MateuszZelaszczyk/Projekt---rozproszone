@@ -32,7 +32,7 @@ def main():
                 game.eaten_plants.append(i)
         game.delete_objects(game.eaten_plants)
         player_position = game.make_pos((p.x, p.y))
-        eaten_plants_str = ",".join([str(int) for key in game.eaten_plants])
+        eaten_plants_str = ",".join([str(key) for key in game.eaten_plants])
         reply = game.read_positions(n.send(player_position + ";" + eaten_plants_str))
         game.eaten_plants.clear()
         p2Pos = reply[0]
