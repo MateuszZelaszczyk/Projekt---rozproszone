@@ -32,11 +32,20 @@ class Game():
         return player2_pos, strs
 
     def read_positions(self, strs):
+        print('read_positions')
+        print(strs)
+        print('read_positions2')
         strs = strs.split(";")
         player2_pos = self.read_pos(strs[0])
         strs.pop(0)
-        objects = str.split(",")
-        return player2_pos, objects
+        data = strs[0].split(",")
+        print('data')
+        print(data)
+        if data[0] != '':
+            eaten_plants = [int(key) for key in data]
+        else:
+            eaten_plants = []
+        return player2_pos, eaten_plants
 
     def read_pos(self, str):
         str = str.split(",")
