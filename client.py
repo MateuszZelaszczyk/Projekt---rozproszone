@@ -29,6 +29,7 @@ def main():
             if collide:
                 game.eaten_plants.append(i)
         game.delete_objects(game.eaten_plants)
+        p.points += len(game.eaten_plants)
         player_position = game.make_pos((p.x, p.y))
         eaten_plants_str = ",".join([str(key) for key in game.eaten_plants])
         game.eaten_plants.clear()

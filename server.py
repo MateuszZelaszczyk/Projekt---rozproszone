@@ -6,6 +6,8 @@ from map import Map
 class Server:
     def __init__(self):
         self.ip = socket.gethostbyname(socket.gethostname())
+        self.player1_points = 0
+        self.player2_points = 0
         self.port = 5555
         self.player_positions = [(0, 0), (200, 200)]
         self.map = Map(600, 700)
@@ -50,7 +52,6 @@ class Server:
         messgage = self.make_pos(self.player_positions[player]) + ";" + self.map.get_objects_coordinates_as_str()
         connect.send(str.encode(messgage))
         print("Sending: ", messgage)
-        reply = ""
         while True:
             try:
                 data = connect.recv(2048).decode()
@@ -61,16 +62,18 @@ class Server:
                     self.player_positions[player], eaten_plants = self.read_positions(data)
                     self.map.delete_objects(eaten_plants)
                     if player == 1:
+                        self.player1_points += len(eaten_plants)
                         self.player1_eaten_plants = eaten_plants
                         reply = self.make_pos(self.player_positions[0]) + ";" + self.make_player2_plants()
                         self.player2_eaten_plants.clear()
                     else:
+                        self.player2_points += len(eaten_plants)
                         self.player2_eaten_plants = eaten_plants
                         reply = self.make_pos(self.player_positions[1]) + ";" + self.make_player1_plants()
                         self.player1_eaten_plants.clear()
                     print("Recieved:", data)
                     print("Sending: ", reply)
-                connect.sendall(str.encode(reply))
+                    connect.sendall(str.encode(reply))
             except:
                 break
         print("Lost connection")

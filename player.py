@@ -12,6 +12,7 @@ class Player:
         self.image2 = pygame.transform.scale(pygame.image.load("cma2.jpg"), (60, 60))
         self.rect = (x, y, width, height)
         self.vel = 3
+        self.points = 0
 
     def draw(self, win, number):
         pygame.draw.rect(win, self.color, self.rect)
