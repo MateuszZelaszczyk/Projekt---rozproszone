@@ -19,7 +19,7 @@ class Network:
     def connect(self):
         try:
             self.client.connect(self.addr)
-            reply = self.client.recv(8192).decode()
+            reply = self.client.recv(16384).decode()
             return reply
         except socket.error as e:
             print(e)

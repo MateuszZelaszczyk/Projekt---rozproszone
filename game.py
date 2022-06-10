@@ -17,10 +17,24 @@ class Game():
 
     def make_plant_pos(self, plant_data):
         plant_data = plant_data.split(",")
-        self.plants[int(plant_data[0])] = [True if randrange(2) else False, int(plant_data[1]), int(plant_data[2])]
+        self.plants[int(plant_data[0])] = [True if randrange(2) else False, plant_data[1], int(plant_data[2]), int(plant_data[3])]
+
+    def get_m1_plants(self):
+        m1_plants = dict()
+        for key in self.plants:
+            if self.plants[key][1] == 'm1':
+                m1_plants[key] = self.plants[key]
+        return m1_plants
+
+    def get_m2_plants(self):
+        m2_plants = dict()
+        for key in self.plants:
+            if self.plants[key][1] == 'm2':
+                m2_plants[key] = self.plants[key]
+        return m2_plants
 
     def draw_plant(self, win, plant_data):
-        position = [plant_data[1], plant_data[2], 40, 40]
+        position = [plant_data[2], plant_data[3], 40, 40]
         pygame.draw.rect(win, (50, 200, 50), position)
         if plant_data[0]:
             win.blit(self.plant_image, position)
@@ -56,9 +70,11 @@ class Game():
         self.win.fill((34, 139, 34))
         if player.map == 'm1':
             self.win.blit(self.map1_image, (0, 0))
+            local_plants = self.get_m1_plants()
         else:
             self.win.blit(self.map2_image, (0, 0))
-        for i in self.plants:
+            local_plants = self.get_m2_plants()
+        for i in local_plants:
             self.draw_plant(self.win, self.plants[i])
         player.draw(self.win, "1")
         player2.draw(self.win, "2")

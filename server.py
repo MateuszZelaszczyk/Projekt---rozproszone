@@ -10,8 +10,8 @@ class Server:
         self.player2_points = 0
         self.port = 5555
         self.player_positions = [('m1', 0, 0), ('m1', 200, 200)]
-        self.map1 = Map(600, 700)
-        self.map2 = Map(600, 700)
+        self.map = Map(600, 700)
+        #self.map2 = Map(600, 700)
         self.player1_eaten_plants = []
         self.player2_eaten_plants = []
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -46,10 +46,10 @@ class Server:
         pos_str = pos_str.split(",")
         return str(pos_str[0]), int(pos_str[1]), int(pos_str[2])
 
-    def get_map_for_position(self, pos):
-        if pos[0] == 'm1':
-            return self.map1
-        return self.map2
+    # def get_map_for_position(self, pos):
+    #     if pos[0] == 'm1':
+    #         return self.map1
+    #     return self.map2
 
     def make_pos(self, tup):
         return str(tup[0]) + "," + str(tup[1]) + "," + str(tup[2])
@@ -70,8 +70,8 @@ class Server:
                     if player == 1:
                         self.player1_points += len(eaten_plants)
                         self.player1_eaten_plants = eaten_plants
-                        map = self.get_map_for_position(self.player_positions[0])
-                        reply = self.make_pos(pos) + ";" + self.make_player2_plants()
+                        #map = self.get_map_for_position(self.player_positions[0])
+                        reply = self.make_pos(self.player_positions[0]) + ";" + self.make_player2_plants()
                         self.player2_eaten_plants.clear()
                     else:
                         self.player2_points += len(eaten_plants)
