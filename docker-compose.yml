@@ -6,7 +6,7 @@ services:
     container_name: mainmapserver
     environment:
       HOME: /home/mmaz/Projekt---rozproszone
-    command: python server.py
+    command: python -u server.py
     ports:
       - 5555:5555
       - 6666:6666
@@ -17,7 +17,7 @@ services:
     container_name: secondmapserver
     environment:
       HOME: /home/mmaz/Projekt---rozproszone
-    command: python server.py
+    command: python -u server.py
     ports:
       - 5556:5555
       - 6667:6667

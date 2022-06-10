@@ -1,13 +1,36 @@
 from _thread import *
 import  socket
 import sys
+
+def is_port_in_use(port):
+    import socket
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex(('localhost', port)) == 0
+
+SERVER_PORTS = [6666, 6667]
+
 hostname = socket.gethostname()
 ip = socket.gethostbyname(hostname)
 server = ip
 port = 5555
 
-s= socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+scom_port = None
+for p in SERVER_PORTS:
+    print("Now checking port ", p)
+    if not is_port_in_use(p):
+        scom_port = p
+        break
+    else:
+        print (f"port {p} is in use on this server")
 
+if(scom_port == None):
+    print("All server ports are occupied. Cannot start server.")
+    exit(1)
+else:
+    print(f"SCOM port for this server is {scom_port}")
+
+s= socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+print("sth else")
 try:
     s.bind((server, port))
 except socket.error as e:
