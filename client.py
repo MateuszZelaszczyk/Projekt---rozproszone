@@ -8,7 +8,7 @@ height = 700
 win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Client")
 plant_image = pygame.transform.scale(pygame.image.load("plant.png"), (40, 40))
-
+plants = dict()
 clientNumber = 0
 
 class  Player():
@@ -22,6 +22,7 @@ class  Player():
         self.image2 = pygame.transform.scale(pygame.image.load("cma2.jpg"), (60, 60))
         self.rect = (x,y,width,height)
         self.vel = 3
+
 
     def draw(self,win, number):
         pygame.draw.rect(win, self.color, self.rect)
@@ -49,61 +50,71 @@ class  Player():
 def draw_plant(win, has_photo, coordinates):
     position = [coordinates[0], coordinates[1], 20, 20]
     pygame.draw.rect(win, (50, 200, 50), position)
-    #if has_photo:
-        #win.blit(plant_image, position)
+    if has_photo:
+        win.blit(plant_image, position)
     #else:
         #win.blit(position)
         #pass
-    win.blit(plant_image, position)
+    #win.blit(plant_image, position)
 
-def read_pos(strs):
+def read_map_postions(strs):
     strs = strs.split(";")
-    print(strs)
-    player_str = strs[0].split(",")
-    print(player_str)
-    player2_pos = int(player_str[0]), int(player_str[1])
+    player2_pos = read_pos(strs[0])
     strs.pop(0)
-    #strs.pop
-    print('po pop')
-    print(strs)
-    objects = []
-    for str in strs:
-        objects.append(read_map_object_pos(str))
+    return player2_pos, strs
+
+
+def read_positions(strs):
+    strs = strs.split(";")
+    player2_pos = read_pos(strs[0])
+    strs.pop(0)
+    objects = str.split(",")
     return player2_pos, objects
 
-
-def read_map_object_pos(str):
+def read_pos(str):
     str = str.split(",")
     return int(str[0]), int(str[1])
+
+def read_plant_pos(str):
+    str = str.split(",")
+    plants[int(str[0])] = [int(str[1]), int(str[2])]
 
 def make_pos(tup):
     return str(tup[0]) + "," + str(tup[1])
 
 
-def window(win, player, player2, map_objects):
+def window(win, player, player2):
     win.fill((255, 255, 255))
-    for map_object in map_objects:
+    for map_object in plants:
         draw_plant(win, True if randrange(2) else False, [map_object[0], map_object[1]])
     player.draw(win, "1")
     player2.draw(win, "2")
-
     pygame.display.update()
+
+def delete_objects(objects_keys):
+    for key in objects_keys:
+        try:
+            plants.pop(key)
+        except KeyError as e:
+            pass
 
 def main():
     pygame.init()
     run = True
     n=Network()
-    replay = (n.getPos())
-    startPos = replay.split(',')
+    startPos, plants_pos = read_map_postions(n.getPos())
+    for str in plants_pos:
+        read_plant_pos(str)
     p = Player(int(startPos[0]), int(startPos[1]), 60, 60, (255, 255, 255))
     p2 = Player(0, 0, 60, 60, (255, 255, 255))
     clock = pygame.time.Clock()
 
     while run:
         clock.tick(60)
-        reply = read_pos(n.send(make_pos((p.x, p.y))))
+        reply = read_positions(n.send(make_pos((p.x, p.y))))
         p2Pos = reply[0]
-        objects_pos = reply[1]
+        removed_objects = reply[1]
+        delete_objects(removed_objects)
         p2.x = p2Pos[0]
         p2.y = p2Pos[1]
         p2.update()
@@ -114,5 +125,5 @@ def main():
                 pygame.quit()
                 sys.exit()
         p.move()
-        window(win, p, p2, objects_pos)
+        window(win, p, p2)
 main()
