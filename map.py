@@ -10,7 +10,7 @@ class Map:
         self.create_map()
 
     def create_map(self):
-        objects_number = randrange(350, 500)
+        objects_number = randrange(50, 100)
         for i in range(objects_number):
             self.objects.append([randrange(self.width), randrange(self.height)])
 

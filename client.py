@@ -7,7 +7,7 @@ height = 700
 
 win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Client")
-plant_image = pygame.transform.scale(pygame.image.load("plant.png"), (20, 20))
+plant_image = pygame.transform.scale(pygame.image.load("plant.png"), (40, 40))
 
 clientNumber = 0
 
@@ -49,11 +49,12 @@ class  Player():
 def draw_plant(win, has_photo, coordinates):
     position = [coordinates[0], coordinates[1], 20, 20]
     pygame.draw.rect(win, (50, 200, 50), position)
-    if has_photo:
-        win.blit(plant_image, position)
-    else:
+    #if has_photo:
+        #win.blit(plant_image, position)
+    #else:
         #win.blit(position)
-        pass
+        #pass
+    win.blit(plant_image, position)
 
 def read_pos(strs):
     strs = strs.split(";")
