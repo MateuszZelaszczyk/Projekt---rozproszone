@@ -13,25 +13,26 @@ def main():
     var = n.get_position()
     print(var)
     startPos, plants_pos = game.read_map_positions(var)
-    for str in plants_pos:
-        game.make_plant_pos(str)
+    for pos in plants_pos:
+        game.make_plant_pos(pos)
     pygame.display.set_caption("Wyscig ciem")
     p = Player(int(startPos[0]), int(startPos[1]), 60, 60, (255, 255, 255))
     p2 = Player(0, 0, 60, 60, (255, 255, 255))
     clock = pygame.time.Clock()
     while run:
-        clock.tick(60)
+        #clock.tick(1)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+        player_rect = pygame.Rect(p.x, p.y, 60, 60)
         for i in game.plants:
-            rect = pygame.Rect(game.win.get_rect().center, game.plants[i][0], game.plants[i][1]).inflate(15, 15)
-            collide = rect.collidepoint(p.x,p.y)
+            rect = pygame.Rect(game.plants[i][1], game.plants[i][2], 40, 40)
+            collide = rect.colliderect(player_rect)
             if collide:
                 game.eaten_plants.append(i)
-                game.delete_objects(i)
+        game.delete_objects(game.eaten_plants)
         player_position = game.make_pos((p.x, p.y))
-        eaten_plants_str = ','.join(game.eaten_plants)
+        eaten_plants_str = ",".join([str(int) for key in game.eaten_plants])
         reply = game.read_positions(n.send(player_position + ";" + eaten_plants_str))
         game.eaten_plants.clear()
         p2Pos = reply[0]
