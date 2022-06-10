@@ -8,11 +8,13 @@ height = 700
 win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Client")
 plant_image = pygame.transform.scale(pygame.image.load("plant.png"), (40, 40))
-
+map1_image = pygame.transform.scale(pygame.image.load("map1.png"), (width, height))
+map2_image = pygame.transform.scale(pygame.image.load("map2.png"), (width, height))
 clientNumber = 0
 
 class  Player():
-    def __init__(self, x, y, width, height, color):
+    def __init__(self, map, x, y, width, height, color):
+        self.map = map
         self.x = x
         self.y = y
         self.height = height
@@ -24,6 +26,7 @@ class  Player():
         self.vel = 3
 
     def draw(self,win, number):
+        print(self.rect)
         pygame.draw.rect(win, self.color, self.rect)
         if(number=="1"):
             win.blit(self.image, self.rect)
@@ -58,14 +61,9 @@ def draw_plant(win, has_photo, coordinates):
 
 def read_pos(strs):
     strs = strs.split(";")
-    print(strs)
     player_str = strs[0].split(",")
-    print(player_str)
-    player2_pos = int(player_str[0]), int(player_str[1])
+    player2_pos = player_str[0], int(player_str[1]), int(player_str[2])
     strs.pop(0)
-    #strs.pop
-    print('po pop')
-    print(strs)
     objects = []
     for str in strs:
         objects.append(read_map_object_pos(str))
@@ -77,14 +75,20 @@ def read_map_object_pos(str):
     return int(str[0]), int(str[1])
 
 def make_pos(tup):
-    return str(tup[0]) + "," + str(tup[1])
+    print(tup)
+    return str(tup[0]) + "," + str(tup[1]) + "," + str(tup[2])
 
 
 def window(win, player, player2, map_objects):
     win.fill((255, 255, 255))
+    if player.map == 'm1':
+        win.blit(map1_image, (0,0))
+    else:
+        win.blit(map2_image, (0,0))
     for map_object in map_objects:
         draw_plant(win, True if randrange(2) else False, [map_object[0], map_object[1]])
     player.draw(win, "1")
+    print("Rect", player2.rect)
     player2.draw(win, "2")
 
     pygame.display.update()
@@ -95,17 +99,18 @@ def main():
     n=Network()
     replay = (n.getPos())
     startPos = replay.split(',')
-    p = Player(int(startPos[0]), int(startPos[1]), 60, 60, (255, 255, 255))
-    p2 = Player(0, 0, 60, 60, (255, 255, 255))
+    p = Player(str(startPos[0]), int(startPos[1]), int(startPos[2]), 60, 60, (255, 255, 255))
+    p2 = Player(str(startPos[0]), 0, 0, 60, 60, (255, 255, 255))
     clock = pygame.time.Clock()
 
     while run:
         clock.tick(60)
-        reply = read_pos(n.send(make_pos((p.x, p.y))))
+        reply = read_pos(n.send(make_pos((p.map, p.x, p.y))))
         p2Pos = reply[0]
         objects_pos = reply[1]
-        p2.x = p2Pos[0]
-        p2.y = p2Pos[1]
+        p2.map = p2Pos[0]
+        p2.x = p2Pos[1]
+        p2.y = p2Pos[2]
         p2.update()
 
         for event in pygame.event.get():
