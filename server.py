@@ -6,7 +6,7 @@ hostname = socket.gethostname()
 ip = socket.gethostbyname(hostname)
 server = ip
 port = 5555
-map = Map(700, 600)
+map = Map(600, 700)
 
 s= socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 

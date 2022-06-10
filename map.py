@@ -10,9 +10,9 @@ class Map:
         self.create_map()
 
     def create_map(self):
-        objects_number = randrange(50, 100)
+        objects_number = randrange(240, 270)
         for i in range(objects_number):
-            self.objects.append([randrange(self.width), randrange(self.height)])
+            self.objects.append([randrange(0, self.width, 25), randrange(0, self.height, 25)])
 
     def delete_object(self, x, y):
         pass
