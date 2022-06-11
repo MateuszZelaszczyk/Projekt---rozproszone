@@ -16,6 +16,7 @@ class Game:
         self.font = pygame.font.SysFont("cambria",25)
         self.plants = dict()
         self.eaten_plants = []
+        self.your_eaten_plants=0
         self.clientNumber = 0
 
     def make_plant_pos(self, plant_data):
@@ -53,11 +54,11 @@ class Game:
     def read_positions(self, strs):
         strs = strs.split(";")
         player2_pos = self.read_pos(strs[0])
-
         strs.pop(0)
         data = strs[0].split(",")
         if data[0] != '':
             eaten_plants = [int(key) for key in data]
+            self.your_eaten_plants+=len(data)
         else:
             eaten_plants = []
         return player2_pos, eaten_plants
