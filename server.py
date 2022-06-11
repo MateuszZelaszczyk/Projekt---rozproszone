@@ -50,6 +50,7 @@ class Server:
         return str(tup[0]) + "," + str(tup[1]) + "," + str(tup[2])
 
     def threaded_client(self, connect, player):
+        global current_player
         messgage = self.make_pos(self.player_positions[player]) + ";" + self.map.get_objects_coordinates_as_str()
         connect.send(str.encode(messgage))
         #print("Sending: ", messgage)
@@ -58,7 +59,10 @@ class Server:
                 data = connect.recv(2048).decode()
                 if not data:
                     print("Disconnected")
+                    current_player -= 1
                     break
+                elif data == 'p_count':
+                    connect.sendall(str.encode(str(current_player)))
                 else:
                     self.player_positions[player], eaten_plants = self.read_positions(data)
                     self.map.delete_objects(eaten_plants)

@@ -13,6 +13,13 @@ class Network:
         self.addr = (self.server, self.port)
         self.pos = self.connect()
 
+    def get_player_count(self):
+        try:
+            self.client.send(str.encode('p_count'))
+            return self.client.recv(4096).decode()
+        except socket.error as e:
+            print(e)
+
     def get_position(self):
         return self.pos
 

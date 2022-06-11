@@ -13,7 +13,6 @@ button_img = pygame.image.load("back_bt.jpg")
 button_img = pygame.transform.scale(button_img,(160,60))
 font = pygame.font.SysFont("cambria",40)
 
-
 def menu():
     game = Game()
     menu_text = font.render("Wyścig ciem bukszpanowych", True, (255,255,255), (0,0,0))
@@ -37,18 +36,34 @@ def menu():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_bt.checkForInput(mouse_pos):
-                    play(game)
+                    join_player_queue(game)
                 if quit_bt.checkForInput(mouse_pos):
                     pygame.quit()
                     sys.exit()
 
         pygame.display.update()
 
+def join_player_queue(game):
+    queue_text = font.render("Oczekiwanie na graczy", True, (255,255,255), (0,0,0))
+    textRect = queue_text.get_rect()
+    textRect.center = (300, 200)
+    queue_text.set_alpha(190)
+    n = Network()
+    game.win.blit(back_photo, (0, 0))
+    game.win.blit(queue_text, textRect)
+    pygame.display.update()
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        if int(n.get_player_count()) > 1:
+            break
+    play(game, n)
 
-def play(game):
+def play(game, n):
     #game = Game()
     run = True
-    n = Network()
     response = n.get_position()
     startPos, plants_pos = game.read_map_positions(response)
     for pos in plants_pos:
@@ -57,11 +72,16 @@ def play(game):
     p = Player(str(startPos[0]), int(startPos[1]), int(startPos[2]), 60, 60, (255, 255, 255))
     p2 = Player(str(startPos[0]), 0, 0, 60, 60, (255, 255, 255))
     clock = pygame.time.Clock()
-    while run:
-        #clock.tick(1)
+    timer_counter= 10
+    pygame.time.set_timer(pygame.USEREVENT, 1000)
+    while run and timer_counter > 0:
+        clock.tick(120)
         for event in pygame.event.get():
+            if event.type == pygame.USEREVENT:
+                timer_counter -= 1
             if event.type == pygame.QUIT:
-                run = False
+                pygame.quit()
+                sys.exit()
         player_rect = pygame.Rect(p.x, p.y, 60, 60)
         if p.map == 'm1':
             local_plant_keys = game.get_m1_plants()
@@ -86,8 +106,7 @@ def play(game):
         p2.y = parsed_reply[0][2]
         p2.update()
         p.move()
-        game.window(p, p2)
-    pygame.quit()
-    sys.exit()
+        game.window(p, p2, timer_counter)
+    game.display_game_over_screen(p, p2)
 
 menu()
