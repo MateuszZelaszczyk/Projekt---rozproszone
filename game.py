@@ -16,7 +16,7 @@ class Game:
         self.font = pygame.font.SysFont("cambria",25)
         self.plants = dict()
         self.eaten_plants = []
-        self.your_eaten_plants=0
+        #self.your_eaten_plants=0
         self.clientNumber = 0
 
     def make_plant_pos(self, plant_data):
@@ -58,7 +58,7 @@ class Game:
         data = strs[0].split(",")
         if data[0] != '':
             eaten_plants = [int(key) for key in data]
-            self.your_eaten_plants+=len(data)
+            #self.your_eaten_plants+=len(data)
         else:
             eaten_plants = []
         return player2_pos, eaten_plants
@@ -104,16 +104,16 @@ class Game:
         self.win.blit(surface, (self.width - 120, 0))
         self.win.blit(self.font.render(timer_text, True, (255,255,255)), (self.width - 90, 27))
     
-    def display_game_over_screen(self, player1, player2):
+    def display_game_over_screen(self, player_points, opponent_points):
         game_over_text = self.font.render("Gra zakończona", True, (255,255,255), (0,0,0))
         textRect = game_over_text.get_rect()
         textRect.center = (300, 200)
         game_over_text.set_alpha(190)
-        p1_score_text = self.font.render(f"You scored: {player1.points}", True, (255,255,255), (0,0,0))
+        p1_score_text = self.font.render(f"You scored: {player_points}", True, (255,255,255), (0,0,0))
         p1_score_rect = p1_score_text.get_rect()
         p1_score_rect.center = (300, 300)
         p1_score_text.set_alpha(190)
-        p2_score_text = self.font.render(f"Your opponent scored: {player2.points}", True, (255,255,255), (0,0,0))
+        p2_score_text = self.font.render(f"Your opponent scored: {opponent_points}", True, (255,255,255), (0,0,0))
         p2_score_rect = p2_score_text.get_rect()
         p2_score_rect.center = (300, 400)
         p2_score_text.set_alpha(190)
@@ -133,3 +133,9 @@ class Game:
         score_text_rect = score_text.get_rect()
         score_text.set_alpha(180)
         self.win.blit(score_text, score_text_rect)
+
+    def get_points(self, data):
+        data = data.split(";")
+        player_points = data[0].split(",")[1]
+        opponent_points = data[1].split(",")[1]
+        return player_points, opponent_points

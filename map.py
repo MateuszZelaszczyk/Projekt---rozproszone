@@ -1,4 +1,3 @@
-import pygame
 from random import randrange
 
 
@@ -10,7 +9,7 @@ class Map:
         self.create_map()
 
     def create_map(self):
-        objects_number = randrange(270, 300)
+        objects_number = randrange(230, 250)
         for i in range(objects_number):
             self.objects[i] = ['m1', randrange(0, self.width, 30), randrange(0, self.height, 30)]
         for i in range(objects_number):
@@ -23,9 +22,11 @@ class Map:
         return ';'.join(map(lambda key: self.get_object_as_str(key), self.objects))
 
     def delete_objects(self, objects_keys):
+        points = 0
         for key in objects_keys:
             try:
                 self.objects.pop(key)
+                points += 1
             except KeyError as e:
                 pass
-
+        return points

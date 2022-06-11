@@ -51,8 +51,8 @@ class Server:
 
     def threaded_client(self, connect, player):
         global current_player
-        messgage = self.make_pos(self.player_positions[player]) + ";" + self.map.get_objects_coordinates_as_str()
-        connect.send(str.encode(messgage))
+        message = self.make_pos(self.player_positions[player]) + ";" + self.map.get_objects_coordinates_as_str()
+        connect.send(str.encode(message))
         #print("Sending: ", messgage)
         while True:
             try:
@@ -63,17 +63,24 @@ class Server:
                     break
                 elif data == 'p_count':
                     connect.sendall(str.encode(str(current_player)))
+                elif data == 'points':
+                    player1_points_str = "1," + str(self.player1_points)
+                    player2_points_str = "0," + str(self.player2_points)
+                    if player == 1:
+                        message = player1_points_str + ";" + player2_points_str
+                    else:
+                        message = player2_points_str + ";" + player1_points_str
+                    connect.sendall(str.encode(message))
                 else:
                     self.player_positions[player], eaten_plants = self.read_positions(data)
-                    self.map.delete_objects(eaten_plants)
+                    points = self.map.delete_objects(eaten_plants)
                     if player == 1:
-                        self.player1_points += len(eaten_plants)
+                        self.player1_points += points
                         self.player1_eaten_plants = eaten_plants
-                        #map = self.get_map_for_position(self.player_positions[0])
                         reply = self.make_pos(self.player_positions[0]) + ";" + self.make_player2_plants()
                         self.player2_eaten_plants.clear()
                     else:
-                        self.player2_points += len(eaten_plants)
+                        self.player2_points += points
                         self.player2_eaten_plants = eaten_plants
                         reply = self.make_pos(self.player_positions[1]) + ";" + self.make_player1_plants()
                         self.player1_eaten_plants.clear()

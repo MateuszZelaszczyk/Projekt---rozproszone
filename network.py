@@ -17,6 +17,13 @@ class Network:
         except socket.error as e:
             print(e)
 
+    def get_points(self):
+        try:
+            self.client.send(str.encode('points'))
+            return self.client.recv(2048).decode()
+        except socket.error as e:
+            print(e)
+
     def get_position(self):
         return self.pos
 

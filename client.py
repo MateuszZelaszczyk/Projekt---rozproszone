@@ -94,7 +94,7 @@ def play(game, n):
                 game.eaten_plants.append(i)
         game.delete_objects(game.eaten_plants)
         p.points += len(game.eaten_plants)
-        p2.points =game.your_eaten_plants
+        #p2.points =game.your_eaten_plants
         player_position = game.make_pos((p.map, p.x, p.y))
         eaten_plants_str = ",".join([str(key) for key in game.eaten_plants])
         game.eaten_plants.clear()
@@ -108,6 +108,7 @@ def play(game, n):
         p2.update()
         p.move()
         game.window(p, p2, timer_counter)
-    game.display_game_over_screen(p, p2)
+    player_points, opponent_points = game.get_points(n.get_points())
+    game.display_game_over_screen(player_points, opponent_points)
 
 menu()
