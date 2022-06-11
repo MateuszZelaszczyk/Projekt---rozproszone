@@ -83,6 +83,7 @@ class Game:
             player2.draw(self.win, "2")
         player.draw(self.win, "1")
         self.draw_timer(timer_counter)
+        self.score_draw(player)
         pygame.display.update()
 
     def delete_objects(self, objects_keys):
@@ -125,3 +126,9 @@ class Game:
                     pygame.quit()
                     sys.exit()
             pygame.display.update()
+
+    def score_draw(self, player):
+        score_text = self.font.render(f"Score: {player.points}", True,(255,255,255), (0,0,0))
+        score_text_rect = score_text.get_rect()
+        score_text.set_alpha(180)
+        self.win.blit(score_text, score_text_rect)
