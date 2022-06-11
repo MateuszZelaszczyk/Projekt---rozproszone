@@ -16,7 +16,6 @@ class Game:
         self.font = pygame.font.SysFont("cambria",25)
         self.plants = dict()
         self.eaten_plants = []
-        #self.your_eaten_plants=0
         self.clientNumber = 0
 
     def make_plant_pos(self, plant_data):
