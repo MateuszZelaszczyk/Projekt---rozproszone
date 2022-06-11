@@ -72,7 +72,7 @@ def play(game, n):
     p = Player(str(startPos[0]), int(startPos[1]), int(startPos[2]), 60, 60, (255, 255, 255))
     p2 = Player(str(startPos[0]), 0, 0, 60, 60, (255, 255, 255))
     clock = pygame.time.Clock()
-    timer_counter= 10
+    timer_counter= 30
     pygame.time.set_timer(pygame.USEREVENT, 1000)
     while run and timer_counter > 0:
         clock.tick(120)
