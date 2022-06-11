@@ -58,7 +58,6 @@ class Game:
         data = strs[0].split(",")
         if data[0] != '':
             eaten_plants = [int(key) for key in data]
-            #self.your_eaten_plants+=len(data)
         else:
             eaten_plants = []
         return player2_pos, eaten_plants

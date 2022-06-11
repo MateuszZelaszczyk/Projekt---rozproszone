@@ -43,6 +43,7 @@ def menu():
 
         pygame.display.update()
 
+
 def join_player_queue(game):
     queue_text = font.render("Oczekiwanie na graczy", True, (255,255,255), (0,0,0))
     textRect = queue_text.get_rect()
@@ -61,8 +62,8 @@ def join_player_queue(game):
             break
     play(game, n)
 
+
 def play(game, n):
-    #game = Game()
     run = True
     response = n.get_position()
     startPos, plants_pos = game.read_map_positions(response)
@@ -94,7 +95,6 @@ def play(game, n):
                 game.eaten_plants.append(i)
         game.delete_objects(game.eaten_plants)
         p.points += len(game.eaten_plants)
-        #p2.points =game.your_eaten_plants
         player_position = game.make_pos((p.map, p.x, p.y))
         eaten_plants_str = ",".join([str(key) for key in game.eaten_plants])
         game.eaten_plants.clear()
@@ -110,5 +110,6 @@ def play(game, n):
         game.window(p, p2, timer_counter)
     player_points, opponent_points = game.get_points(n.get_points())
     game.display_game_over_screen(player_points, opponent_points)
+
 
 menu()

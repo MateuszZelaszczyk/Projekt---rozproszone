@@ -11,7 +11,6 @@ class Server:
         self.port = 5555
         self.player_positions = [('m1', 0, 0), ('m1', 200, 200)]
         self.map = Map(600, 700)
-        #self.map2 = Map(600, 700)
         self.player1_eaten_plants = []
         self.player2_eaten_plants = []
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -53,7 +52,6 @@ class Server:
         global current_player
         message = self.make_pos(self.player_positions[player]) + ";" + self.map.get_objects_coordinates_as_str()
         connect.send(str.encode(message))
-        #print("Sending: ", messgage)
         while True:
             try:
                 data = connect.recv(2048).decode()
@@ -84,8 +82,6 @@ class Server:
                         self.player2_eaten_plants = eaten_plants
                         reply = self.make_pos(self.player_positions[1]) + ";" + self.make_player1_plants()
                         self.player1_eaten_plants.clear()
-                    #print("Recieved:", data)
-                    #print("Sending: ", reply)
                     connect.sendall(str.encode(reply))
             except:
                 break
